@@ -1,1 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Visual Editor</title>
+  <script src="https://unpkg.com/blockly/blockly.min.js"></script> <!-- Подключение Blockly -->
+  <style>
+    /* Базовые стили для сайта */
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+    }
 
+    #header {
+      text-align: center;
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      font-size: 1.5rem;
+    }
+
+    #blocklyDiv {
+      width: 100%;
+      height: calc(100vh - 160px); /* Настроим размер для мобильных экранов */
+    }
+
+    #output {
+      padding: 10px;
+      background-color: #fff;
+      border-top: 1px solid #ddd;
+      box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      border: 1px solid #ddd;
+    }
+
+    button {
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <!-- Заголовок -->
+  <div id="header">Python Visual Editor</div>
+
+  <!-- Рабочая область Blockly -->
+  <div id="blocklyDiv"></div>
+
+  <!-- Отображение Python-кода -->
+  <div id="output">
+    <button onclick="generateCode()">Сгенерировать Python-код</button>
+    <h3>Сгенерированный код:</h3>
+    <pre id="codeOutput">Здесь появится код...</pre>
+  </div>
+
+  <script>
+    // Базовый toolbox с блоками
+    const toolbox = `
+      <xml>
+        <category name="Переменные" colour="230">
+          <block type="variables_set"></block>
+          <block type="variables_get"></block>
+        </category>
+        <category name="Действия" colour="160">
+          <block type="text_print"></block>
+        </category>
+        <category name="Логика" colour="210">
+          <block type="controls_if"></block>
+        </category>
+      </xml>
+    `;
+
+    // Инициализация Blockly
+    const workspace = Blockly.inject('blocklyDiv', {
+      toolbox: toolbox,
+      grid: { spacing: 20, length: 3, colour: '#ddd', snap: true },
+      scrollbars: true,
+      zoom: {
+        controls: true,
+        wheel: true,
+        startScale: 0.9,
+        maxScale: 1.5,
+        minScale: 0.5,
+      }
+    });
+
+    // Генерация Python-кода
+    function generateCode() {
+      const code = Blockly.Python.workspaceToCode(workspace);
+      document.getElementById('codeOutput').innerText = code || 'Нет блоков для генерации.';
+    }
+  </script>
+  <script src="https://unpkg.com/blockly/python_compressed.js"></script> <!-- Генератор Python-кода -->
+</body>
+</html>
